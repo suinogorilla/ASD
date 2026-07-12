@@ -1,5 +1,6 @@
 #include <iostream> 
 #include "Simplelist.h"
+using namespace std;
 
 //funzione che confronta due liste e verifica che sino identiche
 bool are_equal(const list& l1, const list& l2);
@@ -16,7 +17,7 @@ list unione(const list& l1, const list& l2);
 //Riempe la lista in ordine crcescente
 list Ordinsert (list& l, int val)
 {
-    if((l-> next == nullptr) || (l->info >= val))
+    if((l == nullptr) || (l->info >= val))
     {
         cell* aux = new cell;
         aux -> info = val;
@@ -33,10 +34,7 @@ list Ordinsert (list& l, int val)
 
 //stampa lista
 void stampalista(list& l){
-    while(l->next != nullptr)
-    {
-        cout << l->info<<" ";
-        stampalista(l->next);
-    }
-    return;
+    if ( l == nullptr) return;
+    cout << l->info<<" ";   
+    stampalista(l->next);
 }
