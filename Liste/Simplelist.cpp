@@ -32,5 +32,9 @@ int main()
     stampalista(list1);
     cout << endl;
     stampalista(list2);
+
+    bool confronto = are_equal(list1, list2);
+
+    cout << endl << confronto << endl;
 return 0;
 }

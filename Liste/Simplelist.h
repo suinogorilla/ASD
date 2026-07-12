@@ -9,7 +9,7 @@ typedef cell* list;
 
 #endif
 //funzione che confronta due liste e verifica che sino identiche
-bool are_equal(const list& l1, const list& l2);
+bool are_equal( list& l1, list& l2);
 
 // funzione che concatena due liste  mantiene l'ordine (se voglio che la lista risultante sia ordinata poss usare mergesort)
 list cat(const list& l1, const list& l2);
