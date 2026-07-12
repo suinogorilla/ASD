@@ -19,3 +19,6 @@ list unione(const list& l1, const list& l2);
 
 //riempimento lista in maniera ordinata
 list Ordinsert (list& l, int val);
+
+//stampa contenuto intera lista
+int stampalista(list& l);

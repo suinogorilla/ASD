@@ -17,6 +17,7 @@ int main()
     //dimensione liste
     unsigned dim = 10;
     int val;
+    //Riempimento liste
     for (unsigned i = 0; i < dim; i++)
     {
         val = (std::rand()% 201) - 100;
@@ -27,4 +28,9 @@ int main()
         val = (std::rand()% 201) - 100;
         list Ordinsert(list2, val);
     }
+
+    stampalista(list1);
+    stampalista(list2);
+return();
+
 }

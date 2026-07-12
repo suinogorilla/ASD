@@ -1,3 +1,6 @@
+#include <iostream> 
+#include "Simplelist.h"
+
 //funzione che confronta due liste e verifica che sino identiche
 bool are_equal(const list& l1, const list& l2);
 
@@ -25,5 +28,12 @@ list Ordinsert (list& l, int val)
         list risultato = Ordinsert(l -> next, val);
         l -> next = risultato;
         return l; 
+    }
+
+    //stampa lista
+    int stampalista(list& l){
+        if(l->next == nullptr) break;
+        stampalista(l->next);
+        return(l -> info);     
     }
 }
