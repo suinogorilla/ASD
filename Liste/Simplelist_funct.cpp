@@ -12,7 +12,24 @@ bool are_equal(list& l1, list& l2)
 }
 
 // funzione che concatena due liste  mantiene l'ordine (se voglio che la lista risultante sia ordinata poss usare mergesort)
-list cat(const list& l1, const list& l2);
+list cat(const list& l1, const list& l2)
+{
+
+}
+/*void mergeSort(vector<int>& v)
+{
+ ms(v, 0, v.size()-1);
+}
+void ms(vector<int>& v, unsigned int inizio, unsigned int fine)
+{
+ if (inizio < fine)
+ {
+ unsigned int centro = (inizio+fine)/2;
+ ms(v, inizio, centro);
+ ms(v, centro+1, fine);
+ fondi(v, inizio, centro, fine);
+ }
+}*/
 
 //funzione che genera lista contenente l'intersezion degli insiemi di partenza 
 list intersect(const list& l1, const list& l2);
@@ -23,20 +40,20 @@ list unione(const list& l1, const list& l2);
 //Riempe la lista in ordine crcescente
 list Ordinsert (list& l, int val)
 {
-    if((l == nullptr) || (l->info >= val))
-    {
-        cell* aux = new cell;
-        aux -> info = val;
-        aux -> next = l;
-        return aux;
-    }  
-    else 
-    {
-        list risultato = Ordinsert(l -> next, val);
-        l -> next = risultato;
-        return l; 
+    list aux = new cell;
+    aux -> info = val;
+    aux -> next = nullptr;
+    if (l == nullptr) l = aux;
+    list curr = l;
+
+    while (curr != nullptr)
+    {   
+        if (curr == curr-> next)
+            curr = curr -> next;
+        }
+        curr ->next = aux;
+        return l;
     }
-}
 
 //stampa lista
 void stampalista(list& l){
