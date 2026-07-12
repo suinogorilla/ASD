@@ -29,11 +29,14 @@ list Ordinsert (list& l, int val)
         l -> next = risultato;
         return l; 
     }
+}
 
-    //stampa lista
-    int stampalista(list& l){
-        if(l->next == nullptr) break;
+//stampa lista
+void stampalista(list& l){
+    while(l->next != nullptr)
+    {
+        cout << l->info<<" ";
         stampalista(l->next);
-        return(l -> info);     
     }
+    return;
 }

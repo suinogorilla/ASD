@@ -1,10 +1,13 @@
+#ifndef SIMPLELIST_H
+#define SIMPLELIST_H
 
 struct cell{
-int info;
-cell* next;
-}
+    int info;
+    cell* next;
+};
 typedef cell* list;
 
+#endif
 //funzione che confronta due liste e verifica che sino identiche
 bool are_equal(const list& l1, const list& l2);
 
@@ -21,4 +24,4 @@ list unione(const list& l1, const list& l2);
 list Ordinsert (list& l, int val);
 
 //stampa contenuto intera lista
-int stampalista(list& l);
+void stampalista(list& l);
