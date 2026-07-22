@@ -20,8 +20,10 @@ struct list::node {
   
 /* crea la lista vuota */
 void list::createEmpty(List& li){
-  if (li != nullptr) return;
-  li = nullptr; 
+  node* aux = new node;
+  li = aux;
+  aux -> next = li;
+  aux -> prev = li; 
   return;
 }
 
