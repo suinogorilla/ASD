@@ -21,12 +21,12 @@ int main()
     for (unsigned i = 0; i < dim; i++)
     {
         val = (rand()% 201) - 100;
-      list1 = Ordinsert(list1, val);
+      list1 = InsertFirst(list1, val);
     }
     for (unsigned i = 0; i < dim; i++)
     {
         val = (rand()% 201) - 100;
-      list2 = Ordinsert(list2, val);
+      list2 = InsertFirst(list2, val);
     }
 
     stampalista(list1);

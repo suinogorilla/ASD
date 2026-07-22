@@ -25,3 +25,6 @@ list Ordinsert (list& l, int val);
 
 //stampa contenuto intera lista
 void stampalista(list& l);
+
+//inserisce l'elemento in testa alla lista
+list InsertFirst (list& l, int val);
