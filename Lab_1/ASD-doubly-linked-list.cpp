@@ -30,8 +30,8 @@ void list::clear(List& li){
   if((li == nullptr) || (li -> next == li)) return;
   li -> prev -> next = nullptr;
   li -> prev = li;
-  node aux = li -> next;
-  node curr = aux -> next;
+  list::node* aux = li -> next;
+  list::node* curr = aux -> next;
   while (curr != nullptr)
   {
     delete aux;
@@ -52,7 +52,7 @@ bool list::isEmpty(const List& li){
 /* restituisce la dimensione della lista */
 unsigned int list::size(const List& li){
   if((li == nullptr) || (li -> next == li)) return 0;
-  node aux = li -> next;
+  list::node* aux = li -> next;
   int i = 1;
   while(aux != li)
   {
@@ -65,15 +65,15 @@ unsigned int list::size(const List& li){
 /* restituisce l'elemento in posizione pos */
 /* se pos non e corretta, solleva una eccezione di tipo string*/
 Elem list::get(unsigned int pos, const List& li){
-	int dim = list::size(li); 
+	unsigned dim = list::size(li); 
   if((li == nullptr) || (li -> next == li)) return 0;
   if(pos > dim) throw std::runtime_error("Errore: la lista non contiene abbastanza elementi");
   if(pos == 0) throw std::runtime_error("Errore: la posizione specificata non e valida");
   
-  node aux = nullptr;
+  list::node* aux = nullptr;
   if (pos > dim/2)
   {
-    int distance = dim - pos;
+    unsigned distance = dim - pos;
     aux = li -> prev; 
     for(unsigned i = 1; i <= distance; i++)
     {
