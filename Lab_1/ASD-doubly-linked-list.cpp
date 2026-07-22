@@ -59,7 +59,7 @@ unsigned int list::size(const List& li){
     i++;
     aux = aux -> next;
   }
-  return 9999;
+  return i;
 }
 
 /* restituisce l'elemento in posizione pos */
