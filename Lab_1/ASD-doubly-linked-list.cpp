@@ -29,7 +29,7 @@ void list::createEmpty(List& li){
 
 /* "smantella" la lista (tranne la sentinella) */
 void list::clear(List& li){
-  if((li == nullptr) || (li -> next == li)) return;
+ if(isEmpty(li)) return;
   li -> prev -> next = nullptr;
   li -> prev = li;
   list::node* aux = li -> next;
@@ -41,7 +41,7 @@ void list::clear(List& li){
     curr = curr -> next;
   }
   delete aux;
-  li -> next = nullptr;
+  li -> next = li;
   return;
 }
 
@@ -53,9 +53,9 @@ bool list::isEmpty(const List& li){
 
 /* restituisce la dimensione della lista */
 unsigned int list::size(const List& li){
-  if((li == nullptr) || (li -> next == li)) return 0;
+  if(isEmpty(li)) return 0;
   list::node* aux = li -> next;
-  int i = 1;
+  int i = 0;
   while(aux != li)
   {
     i++;
@@ -66,16 +66,14 @@ unsigned int list::size(const List& li){
 
 /* restituisce l'elemento in posizione pos */
 /* se pos non e corretta, solleva una eccezione di tipo string*/
-Elem list::get(unsigned int pos, const List& li){
-	unsigned dim = list::size(li); 
-  if((li == nullptr) || (li -> next == li)) return 0;
-  if(pos > dim) throw std::runtime_error("Errore: la lista non contiene abbastanza elementi");
-  if(pos == 0) throw std::runtime_error("Errore: la posizione specificata non e valida");
-  
+Elem list::get(unsigned int pos, const List& li){ 
+  if(isEmpty(li)) return 0;
+  unsigned dim = list::size(li);
+  if(pos > dim) throw std::runtime_error("Errore: la lista non contiene abbastanza elementi"); 
   list::node* aux = nullptr;
-  if (pos > dim/2)
+  if(pos > dim/2)
   {
-    unsigned distance = dim - pos;
+    unsigned distance = dim - pos + 1;
     aux = li -> prev; 
     for(unsigned i = 1; i <= distance; i++)
     {
@@ -85,7 +83,7 @@ Elem list::get(unsigned int pos, const List& li){
   else
   {
     aux = li -> next;
-for(unsigned i = 1; i < pos; i++)
+for(unsigned i = 1; i < pos + 1; i++)
     {
       aux = aux -> next;
     }
@@ -96,19 +94,71 @@ for(unsigned i = 1; i < pos; i++)
 /* modifica l'elemento in posizione pos */
 /* se pos non e' corretta, solleva una eccezione di tipo string*/
 void list::set(unsigned int pos, Elem el, const List& li){
-	//TO DO
+//gestione eccezioni
+  if(isEmpty(li)) throw std::runtime_error("Errore: la lista e vuota o non esiste");
+  unsigned dim = list::size(li);
+  if((pos > dim)) throw std::runtime_error("Errore: la posizione indicata non e valida");
+  list::node* aux = nullptr;
+  if (pos > dim/2)
+  {
+    unsigned distance = dim - pos + 1;
+    aux = li -> prev; 
+    for(unsigned i = 1; i <= distance; i++)
+    {
+      aux = aux -> prev;
+    }
+  } 
+  else 
+  {
+    aux = li -> next;
+  for(unsigned i = 1; i < pos + 1; i++)
+    {
+      aux = aux -> next;
+    }
+  }
+  aux -> info = el;
+  return;
 }
 
 /* inserisce l'elemento in posizione pos*/
 /*shiftando a destra gli altri elementi */
 /*se pos non e' corretta, solleva una eccezione di tipo string*/
 void list::add(unsigned int pos, Elem el, const List& li){
-	//TO DO
+  unsigned dim = list::size(li);
+  if(pos > dim) throw std::runtime_error("Errore: la posizione non e disponibile");
+  list::node* aux = new node;
+  list::node* curr = li -> next;
+  aux -> info = el;
+  if(pos + 1 < dim/2)
+  {
+    for(unsigned i = 0; i < pos; i++)
+    {
+      curr = curr -> next;
+    }
+  }
+  else
+  {
+    unsigned distance = dim - pos;
+    for(unsigned i = 0; i <= distance; i++)
+    {
+      curr = curr -> prev;
+    }
+  }
+  aux -> prev = curr -> prev;
+  aux -> next = curr;
+  curr -> prev = aux;
+  aux -> prev -> next = aux;
+  return;
 }
 
 /* inserisce l'elemento alla fine della lista */
 void list::addRear(Elem el, const List& li){
-	//TO DO
+  list::node* aux = new node;
+  aux -> info = el;
+  aux -> next = li;
+  li -> prev -> next = aux;
+  li -> prev = aux;
+  return;
 }
 
 /* inserisce l'elemento all'inizio della lista */
