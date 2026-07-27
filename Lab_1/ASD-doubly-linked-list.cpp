@@ -1,4 +1,3 @@
-// FILE DA MODIFICARE
 #include <iostream>
 #include <fstream>
 #include "ASD-doubly-linked-list.h"
@@ -6,8 +5,8 @@
 using namespace list;
 using namespace std;
 
-/*Descrizione da come e' fatta  la struttura node. */
-/*I dettagli interni non saranno visibili dal main*/
+/* Descrizione di com'e' fatta la struttura node. */
+/* I dettagli interni non saranno visibili dal main */
 struct list::node {  
   Elem info;
   node *prev;
@@ -15,7 +14,7 @@ struct list::node {
 };
 
 /**************************************************/
-/*      funzioni da implementare                    */
+/*       funzioni da implementare                 */
 /**************************************************/
   
 /* crea la lista vuota */
@@ -29,19 +28,17 @@ void list::createEmpty(List& li){
 
 /* "smantella" la lista (tranne la sentinella) */
 void list::clear(List& li){
- if(isEmpty(li)) return;
-  li -> prev -> next = nullptr;
-  li -> prev = li;
-  list::node* aux = li -> next;
-  list::node* curr = aux -> next;
-  while (curr != nullptr)
-  {
-    delete aux;
-    aux = curr;
+  if(isEmpty(li)) return;
+  
+  list::node* curr = li -> next;
+  while (curr != li) {
+    list::node* temp = curr;
     curr = curr -> next;
+    delete temp;
   }
-  delete aux;
+  
   li -> next = li;
+  li -> prev = li;
   return;
 }
 
@@ -55,9 +52,8 @@ bool list::isEmpty(const List& li){
 unsigned int list::size(const List& li){
   if(isEmpty(li)) return 0;
   list::node* aux = li -> next;
-  int i = 0;
-  while(aux != li)
-  {
+  unsigned int i = 0;
+  while(aux != li) {
     i++;
     aux = aux -> next;
   }
@@ -65,26 +61,22 @@ unsigned int list::size(const List& li){
 }
 
 /* restituisce l'elemento in posizione pos */
-/* se pos non e corretta, solleva una eccezione di tipo string*/
+/* se pos non e corretta, solleva una eccezione di tipo string */
 Elem list::get(unsigned int pos, const List& li){ 
-  if(isEmpty(li)) return 0;
+  if(isEmpty(li)) throw std::string("Errore: la lista e vuota");
   unsigned dim = list::size(li);
-  if(pos > dim) throw std::runtime_error("Errore: la lista non contiene abbastanza elementi"); 
+  if(pos >= dim) throw std::string("Errore: la lista non contiene abbastanza elementi"); 
+  
   list::node* aux = nullptr;
-  if(pos > dim/2)
-  {
-    unsigned distance = dim - pos + 1;
+  if(pos > dim/2) {
+    unsigned distance = dim - 1 - pos;
     aux = li -> prev; 
-    for(unsigned i = 1; i <= distance; i++)
-    {
+    for(unsigned i = 0; i < distance; i++) {
       aux = aux -> prev;
     }
-  } 
-  else
-  {
+  } else {
     aux = li -> next;
-for(unsigned i = 1; i < pos + 1; i++)
-    {
+    for(unsigned i = 0; i < pos; i++) {
       aux = aux -> next;
     }
   }
@@ -92,27 +84,22 @@ for(unsigned i = 1; i < pos + 1; i++)
 }
 
 /* modifica l'elemento in posizione pos */
-/* se pos non e' corretta, solleva una eccezione di tipo string*/
+/* se pos non e' corretta, solleva una eccezione di tipo string */
 void list::set(unsigned int pos, Elem el, const List& li){
-//gestione eccezioni
-  if(isEmpty(li)) throw std::runtime_error("Errore: la lista e vuota o non esiste");
+  if(isEmpty(li)) throw std::string("Errore: la lista e vuota o non esiste");
   unsigned dim = list::size(li);
-  if((pos > dim)) throw std::runtime_error("Errore: la posizione indicata non e valida");
+  if(pos >= dim) throw std::string("Errore: la posizione indicata non e valida");
+  
   list::node* aux = nullptr;
-  if (pos > dim/2)
-  {
-    unsigned distance = dim - pos + 1;
+  if (pos > dim/2) {
+    unsigned distance = dim - 1 - pos;
     aux = li -> prev; 
-    for(unsigned i = 1; i <= distance; i++)
-    {
+    for(unsigned i = 0; i < distance; i++) {
       aux = aux -> prev;
     }
-  } 
-  else 
-  {
+  } else {
     aux = li -> next;
-  for(unsigned i = 1; i < pos + 1; i++)
-    {
+    for(unsigned i = 0; i < pos; i++) { // FIX: ciclo corretto da i = 0
       aux = aux -> next;
     }
   }
@@ -120,34 +107,35 @@ void list::set(unsigned int pos, Elem el, const List& li){
   return;
 }
 
-/* inserisce l'elemento in posizione pos*/
-/*shiftando a destra gli altri elementi */
-/*se pos non e' corretta, solleva una eccezione di tipo string*/
+/* inserisce l'elemento in posizione pos */
+/* shiftando a destra gli altri elementi */
+/* se pos non e' corretta, solleva una eccezione di tipo string */
 void list::add(unsigned int pos, Elem el, const List& li){
   unsigned dim = list::size(li);
-  if(pos > dim) throw std::runtime_error("Errore: la posizione non e disponibile");
-  list::node* aux = new node;
+  if(pos > dim) throw std::string("Errore: la posizione non e disponibile");
+  
+  // Cerchiamo il nodo attualmente in posizione 'pos'
+  // Se pos == dim, ci si posiziona sulla sentinella (inserimento in coda)
   list::node* curr = li -> next;
-  aux -> info = el;
-  if(pos + 1 < dim/2)
-  {
-    for(unsigned i = 0; i < pos; i++)
-    {
+  if (pos > dim / 2) {
+    curr = li;
+    unsigned distance = dim - pos;
+    for (unsigned i = 0; i < distance; i++) {
+      curr = curr -> prev;
+    }
+  } else {
+    for (unsigned i = 0; i < pos; i++) {
       curr = curr -> next;
     }
   }
-  else
-  {
-    unsigned distance = dim - pos;
-    for(unsigned i = 0; i <= distance; i++)
-    {
-      curr = curr -> prev;
-    }
-  }
-  aux -> prev = curr -> prev;
+
+  // Creazione e collegamento del nuovo nodo prima di 'curr'
+  list::node* aux = new node;
+  aux -> info = el;
   aux -> next = curr;
+  aux -> prev = curr -> prev;
+  curr -> prev -> next = aux;
   curr -> prev = aux;
-  aux -> prev -> next = aux;
   return;
 }
 
@@ -156,6 +144,7 @@ void list::addRear(Elem el, const List& li){
   list::node* aux = new node;
   aux -> info = el;
   aux -> next = li;
+  aux -> prev = li -> prev; // FIX: aggiunto collegamento con il vecchio ultimo nodo
   li -> prev -> next = aux;
   li -> prev = aux;
   return;
@@ -163,23 +152,61 @@ void list::addRear(Elem el, const List& li){
 
 /* inserisce l'elemento all'inizio della lista */
 void list::addFront(Elem el, const List& li) {
-	//TO DO
+  list::node* aux = new node;
+  aux -> info = el;
+  aux -> next = li -> next;
+  aux -> prev = li;
+  li -> next -> prev = aux;
+  li -> next = aux;
+  return;
 }
 
 /* cancella l'elemento in posizione pos dalla lista */
-/* se pos non e' corretta, solleva una eccezione di tipo string*/
-void list::removePos(unsigned int pos,const List& li){
-	//TO DO
+/* se pos non e' corretta, solleva una eccezione di tipo string */
+void list::removePos(unsigned int pos, const List& li){
+  unsigned dim = list::size(li);
+  if (pos >= dim) throw std::string("Errore: posizione non valida");
+  
+  list::node* aux = nullptr;
+  if (pos > dim/2) {
+    unsigned distance = dim - 1 - pos;
+    aux = li -> prev; 
+    for(unsigned i = 0; i < distance; i++) {
+      aux = aux -> prev;
+    }
+  } else {
+    aux = li -> next;
+    for(unsigned i = 0; i < pos; i++) {
+      aux = aux -> next;
+    }
+  }
+  
+  aux -> prev -> next = aux -> next;
+  aux -> next -> prev = aux -> prev;
+  delete aux;
+  return;
 }
 
-/* cancella tutte le occorrenze dell'elemento elem*/
-/*se presenti, dalla lista */
-void list::removeEl(Elem el,const List& li){
-	//TO DO
+/* cancella tutte le occorrenze dell'elemento elem */
+/* se presenti, dalla lista */
+void list::removeEl(Elem el, const List& li){
+  if(isEmpty(li)) return;
+  
+  node* curr = li -> next;
+  while(curr != li) {
+    node* nextNode = curr -> next; // Salviamo il puntatore al prossimo nodo prima della delete
+    if(curr -> info == el) {
+      curr -> prev -> next = curr -> next;
+      curr -> next -> prev = curr -> prev;
+      delete curr;
+    }
+    curr = nextNode;
+  }
+  return;
 }
 
 /**************************************************/
-/*      funzioni implementate                    */
+/*       funzioni implementate                    */
 /**************************************************/
   
 /* riempie una lista da file */
@@ -219,7 +246,7 @@ void list::print(const List& li){
   cout<<endl;
 }
 
-/* produce una string contenendo la lista*/
+/* produce una string contenendo la lista */
 std::string list::tostring(const List& li){
   string out="";
   if(li==li->next){
