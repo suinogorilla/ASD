@@ -29,7 +29,7 @@ namespace queue{
     /**************************************************/
 
     /* restituisce la coda vuota */
-    Queue createEmpty(); 
+    Queue createEmpty();
 
     /* restituisce true se la queue e' vuota */
     bool isEmpty(const Queue&);

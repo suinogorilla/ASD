@@ -15,24 +15,47 @@ using namespace std;
 Stack stack::createEmpty(){
 	// to do
 	Stack sret;
+   sret.data = new Elem[BLOCKDIM];
+   sret.size = 0;
+   sret.maxsize = BLOCKDIM;
 	return sret;
+}
+
+void rialloca ( Stack& st)
+{
+   st.maxsize += BLOCKDIM;
+    Elem* elem = new Elem[st.maxsize];
+   for(unsigned i = 0; i < st.size; i++)
+   {
+      elem[i] = st.data[i];
+   }
+   delete[] st.data;
+   st.data = elem;
+   return;
 }
 
 /* restituisce true se lo stack e' vuoto */
 bool stack::isEmpty(const Stack& st){
-	return true;
+	return !st.size;
 }
 
 /* aggiunge elem in cima (operazione safe, si può sempre fare) */
 void stack::push(const Elem el, Stack& st){
    // to do
+   if(st.size == st.maxsize) rialloca (st);
+   st.data[st.size] = el;
+   st.size++;
+   return; 
+   
 }
 
 /* toglie dallo stack l'ultimo elemento e lo restituisce */
 /* se lo stack è vuoto solleva una eccezione di tipo string */
 Elem stack::pop(Stack& st){
    // to do
-	Elem ret;
+   if(isEmpty(st)) throw string("stack vuoto");
+	Elem ret = st.data[st.size -1];
+   st.size--;
 	return ret;
 }	
 
@@ -40,7 +63,8 @@ Elem stack::pop(Stack& st){
 /* Se lo stack è vuoto solleva una eccezione di tipo string*/
 Elem stack::top(Stack& st){
    // to do
-	Elem ret;
+   if(isEmpty(st)) throw string("stack vuoto");
+	Elem ret = st.data[st.size -1]; 
 	return ret;
 }
 

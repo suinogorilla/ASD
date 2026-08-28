@@ -23,18 +23,36 @@ struct queue::cell{
 Queue queue::createEmpty(){
    // to do
    Queue qret;
+   qret.li = EMPTYLIST;
+   qret.end = EMPTYLIST;
    return qret;
 } 
 
 /* restituisce true se la queue e' vuota */
 bool queue::isEmpty(const Queue& q){
    // to do
-   return true;
+   if(q.li == EMPTYLIST)  return true;
+   return false;
 }
 
 /* inserisce l'elemento "da una parte" della coda */
 void queue::enqueue(Elem e, Queue& q){
    // to do
+   list aux = new cell;
+   aux -> el = e;
+   if( isEmpty(q))
+   {
+      q.li = aux;
+      q.end = aux;
+      aux -> prev = nullptr;
+      aux -> next = nullptr;
+      return;
+   }
+   q.li -> prev = aux;
+   aux -> next = q.li;
+   aux -> prev = nullptr;
+   q.li = aux;
+   return;
 }
 
 /* cancella l'elemento (se esiste) "dall'altra parte */
@@ -43,6 +61,21 @@ void queue::enqueue(Elem e, Queue& q){
 Elem queue::dequeue(Queue& q){
    // to do
    Elem ret;
+   if(isEmpty(q)) throw string("Coda Vuota");
+   ret = q.end -> el;
+   list aux = q.end;
+   if(q.end == q.li) 
+   {
+      q.end = EMPTYLIST;
+      q.li = EMPTYLIST;
+      delete aux;
+   }
+   else
+   {
+      q.end = q.end -> prev;
+      q.end -> next = nullptr;
+      delete aux;
+   }
    return ret;
 }
 
@@ -51,6 +84,8 @@ Elem queue::dequeue(Queue& q){
 Elem queue::first(Queue& q){
    // to do
    Elem ret;
+   if(isEmpty(q)) throw string("Coda Vuota");
+   ret = q.end -> el;
    return ret;
 }
 
